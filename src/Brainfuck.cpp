@@ -85,6 +85,7 @@ bool Brainfuck::Compile() {
                 break;
         }
     }
+    file.close();
 
     if(!begins.empty()) {
         *m_err << "Error: One or more Loops have not been closed!" << std::endl;
@@ -98,7 +99,6 @@ bool Brainfuck::Compile() {
         *m_out << "Warning: The Symbols ! and # are not Supported by this Interpreter!" << std::endl;
     }
 
-    file.close();
     m_compiled = true;
     return true;
 }
@@ -110,46 +110,47 @@ void Brainfuck::Run() {
             return;
         }
     }
-    int32_t  m_cellPtr =  0;
-    uint32_t m_codePtr =  0;
+
+    int32_t  cellPtr =  0;
+    uint32_t codePtr =  0;
 
     int32_t cellCount = 100;
     auto* cells = new byte[cellCount];
     for(int i = 0; i < cellCount; i++) cells[i] = 0;
 
     // Execute
-    while(m_codePtr < m_code.size()) {
-        switch(m_code[m_codePtr]) {
+    while(codePtr < m_code.size()) {
+        switch(m_code[codePtr]) {
             case None:
                 break;
             case PointerInc:
-                m_cellPtr++;
-                if(m_cellPtr >= cellCount) m_cellPtr = 0;
+                cellPtr++;
+                if(cellPtr >= cellCount) cellPtr = 0;
                 break;
             case PointerDec:
-                m_cellPtr--;
-                if(m_cellPtr < 0) m_cellPtr = cellCount - 1;
+                cellPtr--;
+                if(cellPtr < 0) cellPtr = cellCount - 1;
                 break;
             case CellInc:
-                cells[m_cellPtr]++;
+                cells[cellPtr]++;
                 break;
             case CellDec:
-                cells[m_cellPtr]--;
+                cells[cellPtr]--;
                 break;
             case PutChar:
-                *m_out << cells[m_cellPtr];
+                *m_out << cells[cellPtr];
                 break;
             case GetChar:
-                *m_in  >> cells[m_cellPtr];
+                *m_in  >> cells[cellPtr];
                 break;
             case Begin:
-                if(cells[m_cellPtr] == 0) m_codePtr = m_loop[m_codePtr];
+                if(cells[cellPtr] == 0) codePtr = m_loop[codePtr];
                 break;
             case End:
-                if(cells[m_cellPtr] != 0) m_codePtr = m_loop[m_codePtr];
+                if(cells[cellPtr] != 0) codePtr = m_loop[codePtr];
                 break;
         }
-        m_codePtr++;
+        codePtr++;
     }
     delete[] cells;
 }
