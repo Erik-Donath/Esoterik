@@ -4,19 +4,8 @@
 
 #include <fstream>
 #include <iostream>
-#include "Brainfuck.h"
 
-const char* table[9] = {
-        "#",
-        ">",
-        "<",
-        "+",
-        "-",
-        ".",
-        ",",
-        "[",
-        "]"
-};
+#include "Brainfuck.h"
 
 Brainfuck::Brainfuck(const std::string& path) {
     m_source = path;
@@ -103,7 +92,7 @@ bool Brainfuck::Compile() {
         return false;
     }
     if(notSupported) {
-        std::cout << "The Symbols ! and # are not Supported by this Interpreter!" << std::endl;
+        std::cout << "Warning: The Symbols ! and # are not Supported by this Interpreter!" << std::endl;
     }
 
     file.close();
@@ -122,7 +111,7 @@ void Brainfuck::Run() {
     int32_t  m_cellPtr =  0;
     uint32_t m_codePtr =  0;
 
-    int32_t cellCount = 1000;
+    int32_t cellCount = 100;
     auto* cells = new byte[cellCount];
     for(int i = 0; i < cellCount; i++) cells[i] = 0;
 
