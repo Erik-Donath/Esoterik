@@ -9,6 +9,9 @@
 
 Brainfuck::Brainfuck(const std::string& path) {
     m_source = path;
+    m_out = &std::cout;
+    m_err = &std::cerr;
+    m_in  = &std::cin;
 }
 
 bool Brainfuck::Compile() {
@@ -20,7 +23,7 @@ bool Brainfuck::Compile() {
     if(!file.good() || !file.is_open()) {
         file.close();
 
-        std::cerr << "Could not open the file '" << m_source << "'" << std::endl;
+        *m_err << "Could not open the file '" << m_source << "'" << std::endl;
         return false;
     }
 
@@ -84,15 +87,15 @@ bool Brainfuck::Compile() {
     }
 
     if(!begins.empty()) {
-        std::cerr << "Error: One or more Loops have not been closed!" << std::endl;
+        *m_err << "Error: One or more Loops have not been closed!" << std::endl;
         return false;
     }
     if(failedLoopEnd) {
-        std::cerr << "Error: One or more Loops have not been opened!" << std::endl;
+        *m_err << "Error: One or more Loops have not been opened!" << std::endl;
         return false;
     }
     if(notSupported) {
-        std::cout << "Warning: The Symbols ! and # are not Supported by this Interpreter!" << std::endl;
+        *m_out << "Warning: The Symbols ! and # are not Supported by this Interpreter!" << std::endl;
     }
 
     file.close();
@@ -103,11 +106,10 @@ bool Brainfuck::Compile() {
 void Brainfuck::Run() {
     if(!m_compiled) {
         if(!Compile()) {
-            std::cerr << "Failed: Can not run program" << std::endl;
+            *m_err << "Failed: Can not run program" << std::endl;
             return;
         }
     }
-
     int32_t  m_cellPtr =  0;
     uint32_t m_codePtr =  0;
 
@@ -116,7 +118,6 @@ void Brainfuck::Run() {
     for(int i = 0; i < cellCount; i++) cells[i] = 0;
 
     // Execute
-    std::cout << std::endl;
     while(m_codePtr < m_code.size()) {
         switch(m_code[m_codePtr]) {
             case None:
@@ -136,10 +137,10 @@ void Brainfuck::Run() {
                 cells[m_cellPtr]--;
                 break;
             case PutChar:
-                std::cout << cells[m_cellPtr];
+                *m_out << cells[m_cellPtr];
                 break;
             case GetChar:
-                std::cin  >> cells[m_cellPtr];
+                *m_in  >> cells[m_cellPtr];
                 break;
             case Begin:
                 if(cells[m_cellPtr] == 0) m_codePtr = m_loop[m_codePtr];

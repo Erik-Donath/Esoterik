@@ -3,6 +3,8 @@ project(Brainfuck)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Brainfuck src/main.cpp
+add_executable(Brainfuck
+        src/main.cpp
         src/Brainfuck.cpp
-        src/Brainfuck.h)
+        src/Brainfuck.h
+)
