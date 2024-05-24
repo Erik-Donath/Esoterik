@@ -16,6 +16,9 @@ int main(int argc, char *argv[]) {
             continue;
         }
         bf.Run();
+
+        std::cout << "BF Code: " << std::endl << bf.GetBrainfuck() << std::endl;
+        std::cout << "I-Use-Arch-BTW Code: " << std::endl << bf.GetIUseArchBTW() << std::endl;
     }
     return 0;
 }

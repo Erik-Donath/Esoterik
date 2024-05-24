@@ -4,6 +4,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <sstream>
 
 #include "Brainfuck.h"
 
@@ -122,6 +123,7 @@ void Brainfuck::Run() {
     while(codePtr < m_code.size()) {
         switch(m_code[codePtr]) {
             case None:
+            case Debug:
                 break;
             case PointerInc:
                 cellPtr++;
@@ -153,4 +155,40 @@ void Brainfuck::Run() {
         codePtr++;
     }
     delete[] cells;
+}
+std::string Brainfuck::GetBrainfuck() {
+    if(!m_compiled) {
+        if(!Compile()) {
+            *m_err << "Failed: Can not generate Brainfuck code." << std::endl;
+            return "";
+        }
+    }
+
+    std::stringstream ss;
+    static const char* table[] = {
+            " ", ">", "<", "+", "-", ".", ",", "[", "]", "#"
+    };
+
+    for(BrainfuckSymbol symbol : m_code) {
+        ss << table[symbol];
+    }
+    return ss.str();
+}
+std::string Brainfuck::GetIUseArchBTW() {
+    if(!m_compiled) {
+        if(!Compile()) {
+            *m_err << "Failed: Can not generate I-Use-Arch-BTW code." << std::endl;
+            return "";
+        }
+    }
+
+    std::stringstream ss;
+    static const char* table[] = {
+            " ", "i", "use", "arch", "linux", "btw", "by", "the", "way", "gentoo"
+    };
+
+    for(BrainfuckSymbol symbol : m_code) {
+        ss << table[symbol] << ' ';
+    }
+    return ss.str();
 }

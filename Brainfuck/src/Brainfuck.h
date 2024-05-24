@@ -19,6 +19,7 @@ enum BrainfuckSymbol: byte {
     GetChar    = 6,
     Begin      = 7,
     End        = 8,
+    Debug      = 9,
 };
 
 class Brainfuck {
@@ -26,6 +27,9 @@ public:
     explicit Brainfuck(const std::string& path);
     bool Compile();
     void Run();
+
+    std::string GetBrainfuck();
+    std::string GetIUseArchBTW();
 
     // You could use this to use it in other applications
     inline void SetOutStream(std::basic_ostream<char>* out) {
