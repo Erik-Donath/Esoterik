@@ -1,10 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
-project(Brainfuck)
-
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Brainfuck
-        src/main.cpp
-        src/Brainfuck.cpp
-        src/Brainfuck.h
-)
+project(BrainfuckExe)
+add_executable(BrainfuckExe src/BrainfuckExe.cpp)
+add_subdirectory("./Brainfuck/")
+target_link_libraries(BrainfuckExe brainfuck)
