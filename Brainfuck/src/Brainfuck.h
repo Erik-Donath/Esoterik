@@ -22,9 +22,21 @@ enum BrainfuckSymbol: byte {
     Debug      = 9,
 };
 
+enum BrainfuckSourceType: byte {
+    NoneType      = 0,
+    BrainfuckFile = 1,
+    IUseArchBTW   = 2,
+};
+
+struct BrainfuckSource {
+public:
+    std::string Path;
+    BrainfuckSourceType Type;
+};
+
 class Brainfuck {
 public:
-    explicit Brainfuck(const std::string& path);
+    explicit Brainfuck(const BrainfuckSource& source);
     bool Compile();
     void Run();
 
@@ -42,11 +54,14 @@ public:
         m_in = in;
     }
 private:
-    std::string m_source;
+    BrainfuckSource m_source;
     std::vector<BrainfuckSymbol> m_code;
     std::unordered_map<uint32_t, uint32_t> m_loop;
 
     bool m_compiled = false;
+
+    bool CompileBrainfuck();
+    bool CompileIUseArchBTW();
 
     std::basic_ostream<char>* m_out;
     std::basic_ostream<char>* m_err;

@@ -1,16 +1,27 @@
 #include <iostream>
-#include "../Brainfuck/src/Brainfuck.h"
+#include <Brainfuck.h>
+
+BrainfuckSourceType GetTypeFromPath(const std::string& path) {
+    size_t i = path.rfind('.');
+    if (i != std::string::npos) {
+        std::string ending = path.substr(i + 1);
+        if(ending == "bf")               return BrainfuckSourceType::BrainfuckFile;
+        else if(ending == "iusearchbtw") return BrainfuckSourceType::IUseArchBTW;
+    }
+    return BrainfuckSourceType::NoneType;
+}
 
 int main(int argc, char *argv[]) {
     if(argc < 2) {
-        std::cerr << "The first Argument has to be an BF File!" << std::endl;
+        std::cerr << "The first Argument has to be an BF or iusearchbtw File!" << std::endl;
         return 1;
     }
 
     for(int i = 1; i < argc; i++) {
         std::cout << argv[i] << std::endl;
 
-        Brainfuck bf(argv[i]);
+        std::string path = argv[i];
+        Brainfuck bf(BrainfuckSource(path, GetTypeFromPath(path)));
         if(!bf.Compile()) {
             std::cout << std::endl;
             continue;
