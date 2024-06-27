@@ -1,5 +1,5 @@
 #include <iostream>
-#include <Brainfuck.h>
+#include <Brainfuck2.h>
 
 BrainfuckSourceType GetTypeFromPath(const std::string& path) {
     size_t i = path.rfind('.');
@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
         std::cout << argv[i] << std::endl;
 
         std::string path = argv[i];
-        Brainfuck bf(BrainfuckSource(path, GetTypeFromPath(path)));
+        Brainfuck2 bf(BrainfuckSource(path, GetTypeFromPath(path)));
         if(!bf.Compile()) {
             std::cout << std::endl;
             continue;
