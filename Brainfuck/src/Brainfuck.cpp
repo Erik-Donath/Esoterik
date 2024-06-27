@@ -4,13 +4,15 @@
 
 #include <iostream>
 #include <sstream>
+#include <utility>
 #include "Brainfuck.h"
 
-Brainfuck::Brainfuck(const std::string& source) {
-    m_source = source;
-    m_cells = nullptr;
-    m_cellPtr = 0;
-    m_codePtr = 0;
+Brainfuck::Brainfuck(std::string  source) : m_source(std::move(source)) { }
+Brainfuck::Brainfuck(const BrainfuckSource &source) {
+    m_source = source.source;
+    m_code = source.code;
+    m_loops = source.loops;
+    m_compiled = true;
 }
 
 bool Brainfuck::Compile() {
@@ -97,7 +99,7 @@ void Brainfuck::Run() {
 }
 
 bool Brainfuck::Step() {
-    if(!m_running || m_codePtr >= m_code.size()) return false;
+    if(m_codePtr >= m_code.size()) return false;
     switch(m_code[m_codePtr]) {
         case PointerInc:
             m_cellPtr++;
@@ -141,17 +143,7 @@ std::string Brainfuck::GetCompiledSource() {
     static const char* conversion_table[] = {
             " ", ">", "<", "+", "-", ".", ",", "[", "]", "#"
     };
-    return GetSourceWithTable(*conversion_table);
-}
 
-std::string Brainfuck::GetIUseArchBTWCode() {
-    static const char* conversion_table[] = {
-            " ", "i", "use", "arch", "linux", "btw", "by", "the", "way", "gentoo"
-    };
-    return GetSourceWithTable(*conversion_table);
-}
-
-std::string Brainfuck::GetSourceWithTable(const char *table) {
     if(!Compile()) {
         std::cerr << "Failed: Can not retrieve compiled source." << std::endl;
         return "";
@@ -159,6 +151,12 @@ std::string Brainfuck::GetSourceWithTable(const char *table) {
 
     std::stringstream ss;
     for(BrainfuckSymbol symbol : m_code)
-        ss << table[symbol];
+        ss << conversion_table[symbol];
     return ss.str();
 }
+
+Brainfuck::~Brainfuck() {
+    delete[] m_cells;
+}
+
+

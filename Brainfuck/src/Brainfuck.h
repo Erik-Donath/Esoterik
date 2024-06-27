@@ -29,16 +29,23 @@ enum BrainfuckSymbol: byte {
     Debug      = 9,
 };
 
+struct BrainfuckSource {
+    std::string source;
+    std::vector<BrainfuckSymbol> code;
+    std::unordered_map<u32, u32> loops;
+};
+
 class Brainfuck {
 public:
-    explicit Brainfuck(const std::string& source);
+    explicit Brainfuck(std::string  source);
+    explicit Brainfuck(const BrainfuckSource& source);
+    ~Brainfuck();
 
     bool Compile();
     void Run();
 
     std::string GetSource();
     std::string GetCompiledSource();
-    std::string GetIUseArchBTWCode();
 
 private:
     std::string m_source;
@@ -48,12 +55,11 @@ private:
     std::unordered_map<u32, u32> m_loops;
 
     bool m_running = false;
-    i32 m_cellPtr;
-    u32 m_codePtr;
+    i32 m_cellPtr = 0;
+    u32 m_codePtr = 0;
 
     u32 m_cellCount = 100;
-    ubyte* m_cells;
+    ubyte* m_cells = nullptr;
 
     bool Step();
-    std::string GetSourceWithTable(const char* table);
 };
