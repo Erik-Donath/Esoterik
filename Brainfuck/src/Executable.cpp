@@ -5,8 +5,19 @@
 #include <iostream>
 #include <fstream>
 
-#include "Brainfuck.h"
-i32 main(i32 argc, char *argv[]) {
+#include "Parser.h"
+#include "Interpreter.h"
+
+int32_t main(int32_t argc, char *argv[]) {
+    BF_Symbols symbols;
+    symbols.push_back(BF_Symbol::OpenBlock);
+    symbols.push_back(BF_Symbol::GetChr);
+    symbols.push_back(BF_Symbol::PutChr);
+    symbols.push_back(BF_Symbol::CloseBlock);
+    BF_Interpreter interpreter(symbols);
+    interpreter.run(100);
+
+    /*
     if(argc < 2) {
         std::cout << "The first Argument has to be an Brainfuck File!" << std::endl;
         return 1;
@@ -22,12 +33,12 @@ i32 main(i32 argc, char *argv[]) {
         }
 
         std::string source = std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-        Brainfuck bf(source);
+        BrainfuckA bf(source);
         if(!bf.Compile()) {
             std::cout << "Skipping the file do to compilation error" << std::endl;
             continue;
         }
         bf.Run();
         std::cout << std::endl << "Execution has stopped!" << std::endl;
-    }
+    }*/
 }

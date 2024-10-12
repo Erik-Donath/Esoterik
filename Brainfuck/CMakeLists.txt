@@ -2,13 +2,16 @@ cmake_minimum_required(VERSION 3.9)
 
 project(brainfuck VERSION 1.0.0 DESCRIPTION "Brainfuck")
 add_library(brainfuck
-        ./src/Brainfuck.cpp
-        ./src/Brainfuck.h
+        src/Symbols.h
+        src/Parser.cpp
+        src/Parser.h
+        src/Interpreter.cpp
+        src/Interpreter.h
 )
 target_include_directories(brainfuck PUBLIC ./src/)
 
 set_target_properties(brainfuck PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(brainfuck PROPERTIES PUBLIC_HEADER ./src/Brainfuck.h)
+set_target_properties(brainfuck PROPERTIES PUBLIC_HEADER src/BrainfuckA.h)
 
 project(brainfuck_executable VERSION 1.0.0 DESCRIPTION "Brainfuck Executable")
 
